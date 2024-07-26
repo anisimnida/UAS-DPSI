@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { DataKelas } = require('../models');
+const { authenticate } = require('../middleware/auth');
 
 // Create a new DataKelas
-router.post('/', async (req, res) => {
+router.post('/',authenticate , async (req, res) => {
     try {
         const dataKelas = await DataKelas.create(req.body);
         res.status(201).json(dataKelas);
@@ -37,7 +38,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a DataKelas
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate , async (req, res) => {
     try {
         const [updated] = await DataKelas.update(req.body, {
             where: { id: req.params.id },
@@ -54,7 +55,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a DataKelas
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',authenticate , async (req, res) => {
     try {
         const deleted = await DataKelas.destroy({
             where: { id: req.params.id },
